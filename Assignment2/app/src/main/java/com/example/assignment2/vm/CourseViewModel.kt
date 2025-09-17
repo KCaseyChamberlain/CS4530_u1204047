@@ -32,8 +32,12 @@ class CourseViewModel : ViewModel() {
     }
 
     fun updateCourse(courseId: Long, department: String, courseNumber: String, location: String) {
-        _courses.value = _courses.value.map { c ->
-            if (c.id == courseId) c.copy(department = department, courseNumber = courseNumber, location = location) else c
+        _courses.value = _courses.value.map { course ->
+            if (course.id == courseId)
+                course.copy(department = department, courseNumber = courseNumber, location = location)
+            else
+                course
         }
+        _selectedId.value = courseId  // keep the same item selected after saving
     }
 }
