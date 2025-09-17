@@ -56,7 +56,7 @@ private fun MinimalCourseApp(vm: CourseViewModel = viewModel()) {
             OutlinedTextField(
                 value = department,
                 onValueChange = { department = it },
-                label = { Text("Dept") },
+                label = { Text("Department") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(Modifier.height(6.dp))
@@ -121,16 +121,10 @@ private fun MinimalCourseApp(vm: CourseViewModel = viewModel()) {
                         .clickable { vm.selectCourse(course.id) } // tap selects for details
                 ) {
                     Box(Modifier.fillMaxWidth()) {
-                        Column(
-                            modifier = Modifier
-                                .padding(12.dp)
-                                .fillMaxWidth(),
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text("Department: ${course.department}")
-                            Text("Course Number: ${course.courseNumber}")
-                            Text("Location: ${course.location}")
-                        }
+                        Text(
+                            text = course.name,
+                            modifier = Modifier.padding(12.dp)
+                        )
                         Row(modifier = Modifier.align(Alignment.TopEnd)) {
                             TextButton(onClick = {
                                 // enter edit mode + prefill the form, also reflect in detail view
