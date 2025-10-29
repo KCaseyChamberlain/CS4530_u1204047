@@ -1,8 +1,19 @@
+
+import org.gradle.kotlin.dsl.java
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+val props = Properties().apply {
+    val local = rootProject.file("local.properties")
+    if (local.exists()) local.inputStream().use { load(it) }
+}
+val geminiKey: String = (props.getProperty("GEMINI_API_KEY")
+    ?: System.getenv("GEMINI_API_KEY"))
+    ?: ""
 
 // Read secrets from secrets.properties
 val secretsFile = rootProject.file("secrets.properties")
@@ -27,7 +38,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
 
     }
 

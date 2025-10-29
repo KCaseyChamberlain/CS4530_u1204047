@@ -40,16 +40,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
-class MyViewModel : ViewModel()
-{
+class MyViewModel : ViewModel() {
     private val summaryMutable = MutableStateFlow("")
     val summary = summaryMutable.asStateFlow()
 
+    private val model by lazy {
+        GenerativeModel(
+            modelName = "gemini-2.5-flash",
+            apiKey = BuildConfig.GEMINI_API_KEY
+        )
+    }
 
     fun summarizeText(input: String) {
+        if (input.isBlank()) {
+            summaryMutable.value = ""
+            return
+        }
         viewModelScope.launch {
             try {
-
+                val resp = model.generateContent("Summarize this clearly and concisely:\n$input")
+                summaryMutable.value = resp.text ?: "(No summary returned)"
             } catch (e: Exception) {
                 summaryMutable.value = "Error: ${e.message}"
                 Log.e("SummarizeError", e.toString())
@@ -57,6 +67,7 @@ class MyViewModel : ViewModel()
         }
     }
 }
+
 
 class MainActivity : ComponentActivity() {
 
